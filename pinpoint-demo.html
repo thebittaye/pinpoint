@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pinpoint by Tabax — Live Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green:    #1b5e20;
+  --green2:   #2e7d32;
+  --green3:   #4caf50;
+  --gold:     #c8971a;
+  --gold2:    #f5e6b8;
+  --cream:    #f4f6f2;
+  --card:     #ffffff;
+  --ink:      #1a2a1a;
+  --muted:    #6b7a6b;
+  --line:     #dde4d8;
+  --danger:   #c62828;
+  --warn:     #e65100;
+  --ok:       #2e7d32;
+  --blue:     #1565c0;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  font-size: 14px;
+}
+button, select, input { font: inherit; }
+
+/* ── TOP BAR ── */
+.topbar {
+  background: var(--green);
+  color: #fff;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.brand-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+.brand-sub {
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.live-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #69f0ae;
+  animation: pulse-dot 2s infinite;
+  display: inline-block;
+  margin-right: 4px;
+}
+@keyframes pulse-dot {
+  0%,100% { box-shadow: 0 0 0 0 rgba(105,240,174,0.5); }
+  50%      { box-shadow: 0 0 0 7px rgba(105,240,174,0); }
+}
+.nav {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  flex: 1;
+}
+.nav button {
+  border: 0;
+  background: transparent;
+  color: rgba(255,255,255,0.7);
+  padding: 8px 13px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+.nav button:hover,
+.nav button.active {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+.demo-badge {
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.85);
+  white-space: nowrap;
+}
+.topbar-cta {
+  background: var(--gold);
+  color: var(--ink);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+}
+.topbar-cta:hover { background: var(--gold2); }
+
+/* ── DEMO BANNER ── */
+.demo-banner {
+  background: #fff8e1;
+  border-bottom: 1px solid #ffe082;
+  padding: 10px 20px;
+  font-size: 12.5px;
+  color: #6d4c00;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── MAIN LAYOUT ── */
+main { padding: 18px 20px; max-width: 1400px; margin: 0 auto; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.card h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 14px;
+  color: var(--ink);
+}
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.section-header h2 { margin: 0; }
+
+/* ── GRIDS ── */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.kpi {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+}
+.kpi .label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.kpi .value {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--green);
+  margin-top: 6px;
+  line-height: 1;
+}
+.kpi .value.warn { color: var(--warn); }
+.kpi .value.danger { color: var(--danger); }
+.kpi .sub { font-size: 11.5px; color: var(--muted); margin-top: 5px; }
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 1.7fr 0.8fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* ── HERO CARD ── */
+.hero-banner {
+  background: linear-gradient(135deg, var(--green) 0%, #0a3d18 100%);
+  color: #fff;
+  border-radius: 14px;
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-banner::before {
+  content: '';
+  position: absolute;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  right: -40px; top: -60px;
+}
+.hero-banner h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px; font-weight: 800;
+  margin-bottom: 6px;
+}
+.hero-banner p { font-size: 13.5px; opacity: 0.8; max-width: 420px; }
+.hero-actions { display: flex; gap: 10px; flex-shrink: 0; }
+
+/* ── MAP ── */
+.map-wrap {
+  height: 440px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background:
+    repeating-linear-gradient(0deg, rgba(180,210,170,0.35) 0px, rgba(180,210,170,0.35) 1px, transparent 1px, transparent 36px),
+    repeating-linear-gradient(90deg, rgba(180,210,170,0.35) 0px, rgba(180,210,170,0.35) 1px, transparent 1px, transparent 36px),
+    linear-gradient(150deg, #c8dfc2 0%, #daebd5 40%, #d0e8e0 70%, #c9dfe0 100%);
+}
+.map-water {
+  position: absolute;
+  left: -5%; right: -5%;
+  bottom: -10%; height: 38%;
+  background: #b8dced;
+  border-radius: 50% 50% 0 0 / 30% 30% 0 0;
+}
+.map-river {
+  position: absolute;
+  height: 12px;
+  background: #b8dced;
+  border-radius: 6px;
+  left: 0; right: 0;
+  top: 56%;
+  opacity: 0.7;
+}
+.road {
+  position: absolute;
+  background: #f0ebcc;
+  border: 1px solid #d8d0a8;
+  border-radius: 6px;
+  transform-origin: left center;
+}
+.r1 { height: 7px; width: 72%; left: 8%; top: 38%; transform: rotate(-4deg); }
+.r2 { height: 7px; width: 55%; left: 28%; top: 62%; transform: rotate(8deg); }
+.r3 { height: 5px; width: 45%; left: 14%; top: 24%; transform: rotate(18deg); }
+.r4 { height: 5px; width: 38%; left: 50%; top: 46%; transform: rotate(-12deg); }
+
+.city-label {
+  position: absolute;
+  font-size: 11px;
+  font-weight: 600;
+  color: #3d5c3d;
+  background: rgba(255,255,255,0.75);
+  padding: 2px 6px;
+  border-radius: 5px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Vehicle markers */
+.vmarker {
+  position: absolute;
+  width: 22px; height: 22px;
+  border-radius: 50% 50% 50% 0;
+  transform: translate(-50%, -100%) rotate(-45deg);
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  cursor: pointer;
+  transition: left 1s ease, top 1s ease;
+  z-index: 5;
+}
+.vmarker.moving  { background: var(--ok); }
+.vmarker.idle    { background: var(--warn); }
+.vmarker.parked  { background: var(--blue); }
+.vmarker.offline { background: #8d9790; }
+.vmarker.alert   { background: var(--danger); animation: flash 0.8s infinite; }
+@keyframes flash {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+.vmarker:hover { z-index: 10; transform: translate(-50%, -110%) rotate(-45deg) scale(1.2); }
+
+.map-tooltip {
+  position: absolute;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  min-width: 175px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+  pointer-events: none;
+  display: none;
+  z-index: 20;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.map-controls {
+  position: absolute;
+  right: 12px; top: 12px;
+  display: flex; flex-direction: column; gap: 6px; z-index: 10;
+}
+.map-controls button {
+  width: 34px; height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--green);
+  transition: background 0.15s;
+}
+.map-controls button:hover { background: var(--cream); }
+
+/* ── VEHICLE LIST ── */
+.vehicle-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: all 0.15s;
+}
+.vehicle-item:hover { border-color: var(--green3); background: #f0f7f0; }
+.vehicle-item:last-child { margin-bottom: 0; }
+.v-dot {
+  width: 11px; height: 11px; border-radius: 50%;
+}
+.v-dot.moving  { background: var(--ok); }
+.v-dot.idle    { background: var(--warn); }
+.v-dot.parked  { background: var(--blue); }
+.v-dot.offline { background: #8d9790; }
+.v-dot.alert   { background: var(--danger); }
+.v-name { font-weight: 700; font-size: 13px; }
+.v-meta { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+
+/* ── BADGES ── */
+.badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.badge.ok      { background: #e8f5e9; color: var(--green); }
+.badge.warn    { background: #fff3e0; color: #7c3700; }
+.badge.danger  { background: #fce4e4; color: #8b0000; }
+.badge.off     { background: #f0f0f0; color: #555; }
+.badge.blue    { background: #e3f2fd; color: #1565c0; }
+.badge.gold    { background: #fff8e1; color: #6d4c00; }
+
+/* ── BUTTONS ── */
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn.green  { background: var(--green2); color: #fff; }
+.btn.green:hover { background: var(--green); }
+.btn.gold   { background: var(--gold); color: #1a1a00; }
+.btn.gold:hover { opacity: 0.9; }
+.btn.light  { background: #edf3ed; color: var(--green); }
+.btn.light:hover { background: #daeada; }
+.btn.danger { background: var(--danger); color: #fff; }
+.btn.danger:hover { background: #8b0000; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── ALERT ITEMS ── */
+.alert-item {
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+}
+.alert-item:last-child { border-bottom: none; }
+.alert-item strong { display: block; font-size: 13px; margin-bottom: 2px; }
+.alert-item span { font-size: 12px; color: var(--muted); }
+.alert-item.a-danger strong { color: var(--danger); }
+.alert-item.a-warn strong { color: var(--warn); }
+
+/* ── TOGGLE SWITCH ── */
+.switch-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+}
+.switch-row:last-child { border-bottom: none; }
+.switch-label strong { display: block; font-size: 13px; }
+.switch-label span { font-size: 11.5px; color: var(--muted); }
+.switch {
+  width: 44px; height: 24px;
+  background: #c8ceca;
+  border-radius: 99px;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.switch::after {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  top: 3px; left: 3px;
+  transition: left 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.switch.on { background: var(--green2); }
+.switch.on::after { left: 23px; }
+
+/* ── FLEET TABLE ── */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  background: var(--cream);
+  border-bottom: 2px solid var(--line);
+  white-space: nowrap;
+}
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f5faf5; }
+
+/* ── TRIP PLAYBACK ── */
+.trip-timeline {
+  height: 8px;
+  background: #e0e8dc;
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+.trip-progress {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green2), var(--gold));
+  border-radius: 99px;
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
+/* ── GAUGE ── */
+.gauge {
+  height: 8px;
+  background: #e4e9e0;
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.gauge > div {
+  height: 100%;
+  background: var(--green2);
+  border-radius: 99px;
+}
+
+/* ── SEARCH ── */
+.search-input {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  font-size: 13px;
+  color: var(--ink);
+  transition: border-color 0.2s;
+}
+.search-input:focus { outline: none; border-color: var(--green3); }
+
+/* ── REPORTS CHART ── */
+.bar-chart {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  align-items: end;
+  height: 180px;
+  padding-top: 10px;
+}
+.bar {
+  border-radius: 8px 8px 0 0;
+  position: relative;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  min-height: 20px;
+}
+.bar:hover { opacity: 0.8; }
+.bar-label {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── MAINTENANCE ── */
+.maint-due { color: var(--warn); font-weight: 700; }
+.maint-ok { color: var(--ok); }
+
+/* ── CTA BANNER ── */
+.cta-banner {
+  background: linear-gradient(135deg, var(--green) 0%, #0a3d18 100%);
+  color: #fff;
+  border-radius: 14px;
+  padding: 32px 40px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.cta-banner h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 24px; font-weight: 800;
+  margin-bottom: 6px;
+  color: #fff;
+}
+.cta-banner p { font-size: 14px; opacity: 0.8; max-width: 460px; }
+.cta-actions { display: flex; gap: 12px; flex-wrap: wrap; flex-shrink: 0; }
+.cta-primary {
+  background: var(--gold);
+  color: var(--ink);
+  padding: 13px 24px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.cta-primary:hover { background: var(--gold2); transform: translateY(-1px); }
+.cta-ghost {
+  border: 1.5px solid rgba(255,255,255,0.4);
+  color: #fff;
+  padding: 13px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.cta-ghost:hover { border-color: #fff; background: rgba(255,255,255,0.08); }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  right: 20px; bottom: 20px;
+  background: #1a2a1a;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  box-shadow: 0 5px 24px rgba(0,0,0,0.2);
+  display: none;
+  z-index: 99;
+  max-width: 320px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .topbar { flex-wrap: wrap; }
+  .nav { order: 3; width: 100%; }
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .main-grid { grid-template-columns: 1fr; }
+  .split { grid-template-columns: 1fr; }
+  .map-wrap { height: 360px; }
+  .cta-banner { flex-direction: column; padding: 24px; }
+}
+@media (max-width: 520px) {
+  main { padding: 12px; }
+  .kpi-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .hero-banner { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <a href="pinpoint-by-tabax.html" class="brand">
+    <div>
+      <div class="brand-name">Pinpoint</div>
+      <div class="brand-sub">by Tabax Digital</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <button class="active" data-page="dashboard">📊 Dashboard</button>
+    <button data-page="live">📍 Live Tracking</button>
+    <button data-page="trips">🗺 Trip Playback</button>
+    <button data-page="alerts">🔔 Alerts</button>
+    <button data-page="fleet">🚗 Fleet</button>
+    <button data-page="reports">📈 Reports</button>
+    <button data-page="maintenance">🔧 Maintenance</button>
+    <button data-page="settings">⚙️ Settings</button>
+  </nav>
+  <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
+    <span class="demo-badge"><span class="live-dot"></span>Demo Mode</span>
+    <a href="pinpoint-by-tabax.html#contact" class="topbar-cta">Get Started</a>
+  </div>
+</header>
+
+<!-- DEMO BANNER -->
+<div class="demo-banner">
+  🎯 This is an interactive demonstration — all vehicles, movements, alerts and data below are simulated. No live tracker is connected. <strong style="margin-left:8px;">Ready to go live? <a href="pinpoint-by-tabax.html#contact" style="color:#6d4c00;">Contact us →</a></strong>
+</div>
+
+<main>
+
+  <!-- ═══════════════ DASHBOARD ═══════════════ -->
+  <section id="dashboard" class="panel active">
+    <div class="hero-banner">
+      <div>
+        <h1>See every vehicle. Know every journey.</h1>
+        <p>Live GPS tracking, geofences, alerts, maintenance and reports — built for businesses in The Gambia & Senegal.</p>
+      </div>
+      <div class="hero-actions">
+        <button class="btn gold" onclick="simulateAlert()">⚡ Simulate Alert</button>
+        <a href="pinpoint-by-tabax.html#contact" class="btn light">Get This Live →</a>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="label">Vehicles online</div>
+        <div class="value" id="kpi-online">9 / 10</div>
+        <div class="sub">3 moving now</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Distance today</div>
+        <div class="value">247 km</div>
+        <div class="sub">Across all vehicles</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Active alerts</div>
+        <div class="value warn" id="kpi-alerts">2</div>
+        <div class="sub">1 needs attention</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Fleet utilisation</div>
+        <div class="value">74%</div>
+        <div class="sub">+6% vs last week</div>
+      </div>
+    </div>
+
+    <!-- Fleet health -->
+    <div style="margin-bottom:14px;">
+      <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 18px;">
+        <div style="flex:1;">
+          <div style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Fleet Health</div>
+          <div class="gauge"><div style="width:90%"></div></div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <span class="badge ok" style="font-size:13px;padding:6px 14px;">90% Healthy</span>
+        </div>
+        <div style="font-size:12px;color:var(--muted);">9 online · 1 offline</div>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <!-- MAP -->
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div style="padding:14px 18px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);">
+          <h2 style="margin:0;">Live Fleet Map</h2>
+          <div style="display:flex;gap:8px;">
+            <button class="btn light" onclick="centerFleet()">Centre Fleet</button>
+            <button class="btn gold" onclick="simulateAlert()">⚡ Alert Demo</button>
+          </div>
+        </div>
+        <div class="map-wrap" id="mainMap">
+          <div class="map-water"></div>
+          <div class="map-river"></div>
+          <div class="road r1"></div>
+          <div class="road r2"></div>
+          <div class="road r3"></div>
+          <div class="road r4"></div>
+          <div class="city-label" style="left:10%;top:52%;">Banjul</div>
+          <div class="city-label" style="left:24%;top:63%;">Serekunda</div>
+          <div class="city-label" style="left:45%;top:48%;">Brikama</div>
+          <div class="city-label" style="left:63%;top:36%;">Farafenni</div>
+          <div class="city-label" style="left:72%;top:22%;">Kaolack</div>
+          <div class="city-label" style="left:30%;top:28%;">Kerewan</div>
+          <div class="map-controls">
+            <button onclick="zoomMap(1)" title="Zoom in">+</button>
+            <button onclick="zoomMap(-1)" title="Zoom out">−</button>
+          </div>
+          <div class="map-tooltip" id="mapTooltip"></div>
+        </div>
+      </div>
+
+      <!-- VEHICLE LIST -->
+      <div class="card" style="overflow-y:auto;max-height:520px;">
+        <div class="section-header">
+          <h2>Vehicles</h2>
+          <input class="search-input" id="vehicleSearch" placeholder="Search…" oninput="filterVehicles()" style="width:110px;">
+        </div>
+        <div id="vehicleList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ LIVE TRACKING ═══════════════ -->
+  <section id="live" class="panel">
+    <div class="split" style="margin-bottom:14px;">
+      <div class="card">
+        <div class="section-header">
+          <h2>Vehicle Command Centre</h2>
+          <span class="badge ok"><span class="live-dot" style="width:6px;height:6px;"></span> Live</span>
+        </div>
+        <select id="liveSelect" class="search-input" onchange="renderLiveVehicle()" style="width:100%;margin-bottom:14px;"></select>
+        <div id="liveDetails"></div>
+      </div>
+      <div class="card">
+        <h2>Remote Controls</h2>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">Demo only — shows what live controls look like. Real controls require device support and authorisation.</p>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Ignition state</strong><span>Current: ON</span></div>
+          <span class="badge ok">ON</span>
+        </div>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Immobiliser</strong><span>Prevents restart after stop</span></div>
+          <button class="btn danger" onclick="toast('Demo: immobilise command queued. No real command sent.')">Demo immobilise</button>
+        </div>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Request fresh GPS</strong><span>Force location update</span></div>
+          <button class="btn light" onclick="toast('Fresh GPS position requested — demo response received in 2s.')">Request</button>
+        </div>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Contact driver</strong><span>Open WhatsApp to driver</span></div>
+          <button class="btn light" onclick="toast('WhatsApp opened to driver contact in demo.')">💬 WhatsApp</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-header">
+        <h2>Live Telemetry</h2>
+        <span style="font-size:12px;color:var(--muted);">Updates every 3 seconds</span>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi"><div class="label">Speed</div><div class="value" id="liveSpeed">–</div></div>
+        <div class="kpi"><div class="label">Ignition</div><div class="value">ON</div></div>
+        <div class="kpi"><div class="label">Battery voltage</div><div class="value">13.8 V</div></div>
+        <div class="kpi"><div class="label">GPS satellites</div><div class="value">14</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ TRIP PLAYBACK ═══════════════ -->
+  <section id="trips" class="panel">
+    <div class="card">
+      <div class="section-header">
+        <h2>Trip History & Playback</h2>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <select class="search-input">
+            <option>DLH-TR01 — Massey Ferguson 590</option>
+            <option>GMB-221 — Toyota Hilux</option>
+            <option>KRG-017 — Renault Master</option>
+          </select>
+          <button class="btn green" onclick="playTrip()">▶ Play Trip</button>
+          <button class="btn light" onclick="resetTrip()">↺ Reset</button>
+        </div>
+      </div>
+
+      <div class="split">
+        <div>
+          <div class="map-wrap" style="height:320px;" id="tripMap">
+            <div class="map-water"></div>
+            <div class="map-river"></div>
+            <div class="road r1"></div>
+            <div class="road r2"></div>
+            <div class="road r3"></div>
+            <div class="city-label" style="left:10%;top:52%;">Banjul</div>
+            <div class="city-label" style="left:24%;top:63%;">Serekunda</div>
+            <div class="city-label" style="left:45%;top:48%;">Brikama</div>
+            <div id="tripMarker" class="vmarker moving" style="left:16%;top:68%;"></div>
+          </div>
+          <div class="trip-timeline"><div class="trip-progress" id="tripProgress"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:4px;">
+            <span>08:12 — Serekunda</span>
+            <span>10:04 — Brikama</span>
+          </div>
+        </div>
+        <div>
+          <table>
+            <tr><th>Trip Summary</th><th></th></tr>
+            <tr><td>Start time</td><td><strong>08:12</strong> — Serekunda</td></tr>
+            <tr><td>End time</td><td><strong>10:04</strong> — Brikama</td></tr>
+            <tr><td>Distance</td><td><strong>38.4 km</strong></td></tr>
+            <tr><td>Drive time</td><td><strong>1h 12m</strong></td></tr>
+            <tr><td>Idle time</td><td><strong>22m</strong></td></tr>
+            <tr><td>Max speed</td><td><strong>78 km/h</strong></td></tr>
+            <tr><td>Stops made</td><td><strong>2</strong></td></tr>
+            <tr><td>Fuel estimate</td><td><strong>4.8 L</strong></td></tr>
+            <tr><td>Driver score</td><td><span class="badge ok">88 / 100</span></td></tr>
+          </table>
+          <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn light" onclick="toast('Trip exported as PDF in demo.')">📄 Export PDF</button>
+            <button class="btn gold" onclick="toast('WhatsApp share opened in demo.')">💬 Share on WhatsApp</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ ALERTS ═══════════════ -->
+  <section id="alerts" class="panel">
+    <div class="split">
+      <div class="card">
+        <div class="section-header">
+          <h2>Alert Centre</h2>
+          <button class="btn gold" onclick="simulateAlert()">⚡ Generate Demo Alert</button>
+        </div>
+        <div id="alertList"></div>
+      </div>
+      <div class="card">
+        <h2>Alert Rules</h2>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Overspeed</strong><span>Alert above 90 km/h</span></div>
+          <div class="switch on" onclick="toggleSwitch(this)"></div>
+        </div>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Geofence entry / exit</strong><span>Depot, farm, customer sites</span></div>
+          <div class="switch on" onclick="toggleSwitch(this)"></div>
+        </div>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Ignition after hours</strong><span>20:00 – 06:00 window</span></div>
+          <div class="switch on" onclick="toggleSwitch(this)"></div>
+        </div>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Tracker disconnected</strong><span>Power or GPS signal loss</span></div>
+          <div class="switch on" onclick="toggleSwitch(this)"></div>
+        </div>
+        <div class="switch-row">
+          <div class="switch-label"><strong>WhatsApp notifications</strong><span>Instant alerts to your phone</span></div>
+          <div class="switch on" onclick="toggleSwitch(this)"></div>
+        </div>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Senegal border crossing</strong><span>Alert when vehicle enters Senegal</span></div>
+          <div class="switch" onclick="toggleSwitch(this)"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FLEET ═══════════════ -->
+  <section id="fleet" class="panel">
+    <div class="card">
+      <div class="section-header">
+        <h2>Fleet & Drivers</h2>
+        <div style="display:flex;gap:8px;">
+          <input class="search-input" id="fleetSearch" placeholder="Search fleet…" oninput="renderFleet()">
+          <button class="btn green" onclick="toast('Add vehicle form opened in demo.')">＋ Add Vehicle</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="fleetTable"></table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ REPORTS ═══════════════ -->
+  <section id="reports" class="panel">
+    <div class="kpi-row" style="margin-bottom:16px;">
+      <div class="kpi"><div class="label">Distance this month</div><div class="value">5,840 km</div><div class="sub">+8% month-on-month</div></div>
+      <div class="kpi"><div class="label">Fuel estimate</div><div class="value">778 L</div><div class="sub">Based on vehicle profiles</div></div>
+      <div class="kpi"><div class="label">Idle time</div><div class="value warn">28 h</div><div class="sub">Potential savings: 8h</div></div>
+      <div class="kpi"><div class="label">Driver score</div><div class="value">84/100</div><div class="sub">Fleet average</div></div>
+    </div>
+
+    <div class="split">
+      <div class="card">
+        <h2>Monthly Distance (km)</h2>
+        <div class="bar-chart">
+          <div class="bar" style="height:48%;background:#c5d7c4;" title="Mar: 3,240km"><span class="bar-label">Mar</span></div>
+          <div class="bar" style="height:62%;background:#aac8ad;" title="Apr: 4,100km"><span class="bar-label">Apr</span></div>
+          <div class="bar" style="height:54%;background:#95b89a;" title="May: 3,600km"><span class="bar-label">May</span></div>
+          <div class="bar" style="height:73%;background:#79a87e;" title="Jun: 4,870km"><span class="bar-label">Jun</span></div>
+          <div class="bar" style="height:80%;background:#509e5e;" title="Jul: 5,340km"><span class="bar-label">Jul</span></div>
+          <div class="bar" style="height:88%;background:var(--green2);" title="Aug: 5,840km"><span class="bar-label">Aug</span></div>
+        </div>
+        <div style="margin-top:28px;font-size:12px;color:var(--muted);">Distance is increasing month-on-month — fleet is growing.</div>
+      </div>
+      <div class="card">
+        <h2>Export & Sharing</h2>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Generate reports for your records, accountant, or to share with clients.</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <button class="btn green" onclick="downloadCSV()">⬇ Download CSV Report</button>
+          <button class="btn light" onclick="toast('PDF report prepared — ready to download in demo.')">📄 PDF Report</button>
+          <button class="btn gold" onclick="toast('WhatsApp share flow opened in demo.')">💬 Share via WhatsApp</button>
+        </div>
+        <div style="margin-top:20px;padding:14px;background:var(--cream);border-radius:10px;font-size:12.5px;color:var(--muted);">
+          <strong style="display:block;color:var(--ink);margin-bottom:4px;">Customer Reports</strong>
+          Generate and share trip reports directly with your customers — ideal for hire businesses proving hours worked or distance covered.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ MAINTENANCE ═══════════════ -->
+  <section id="maintenance" class="panel">
+    <div class="card">
+      <div class="section-header">
+        <h2>Maintenance Planner</h2>
+        <span class="badge warn">2 due soon</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Vehicle</th><th>Service</th><th>Due in</th><th>Odometer</th><th>Status</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>DLH-TR01</strong><br><span style="font-size:11.5px;color:var(--muted);">Massey Ferguson 590</span></td>
+              <td>Engine oil + filters</td>
+              <td class="maint-due">270 km</td>
+              <td>8,730 km</td>
+              <td><span class="badge warn">Due soon</span></td>
+              <td><button class="btn light" onclick="toast('Service booking form opened in demo.')">Book</button></td>
+            </tr>
+            <tr>
+              <td><strong>GMB-221</strong><br><span style="font-size:11.5px;color:var(--muted);">Toyota Hilux</span></td>
+              <td>Tyre rotation</td>
+              <td>1,850 km</td>
+              <td>42,150 km</td>
+              <td><span class="badge ok">OK</span></td>
+              <td><button class="btn light" onclick="toast('Service booking form opened in demo.')">Book</button></td>
+            </tr>
+            <tr>
+              <td><strong>KRG-017</strong><br><span style="font-size:11.5px;color:var(--muted);">Renault Master</span></td>
+              <td>Brake inspection</td>
+              <td class="maint-due">12 days</td>
+              <td>61,040 km</td>
+              <td><span class="badge warn">Due soon</span></td>
+              <td><button class="btn light" onclick="toast('Service booking form opened in demo.')">Book</button></td>
+            </tr>
+            <tr>
+              <td><strong>GMB-404</strong><br><span style="font-size:11.5px;color:var(--muted);">Toyota Corolla</span></td>
+              <td>Annual inspection</td>
+              <td>64 days</td>
+              <td>23,610 km</td>
+              <td><span class="badge ok">OK</span></td>
+              <td><button class="btn light" onclick="toast('Service booking form opened in demo.')">Book</button></td>
+            </tr>
+            <tr>
+              <td><strong>DLH-TR03</strong><br><span style="font-size:11.5px;color:var(--muted);">New Holland Tractor</span></td>
+              <td>Hydraulic fluid check</td>
+              <td>90 days</td>
+              <td>3,210 km</td>
+              <td><span class="badge ok">OK</span></td>
+              <td><button class="btn light" onclick="toast('Service booking form opened in demo.')">Book</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SETTINGS ═══════════════ -->
+  <section id="settings" class="panel">
+    <div class="split">
+      <div class="card">
+        <h2>Company Settings</h2>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Company name</strong><span>Pinpoint Demo Fleet</span></div>
+          <button class="btn light" onclick="toast('Company editor opened in demo.')">Edit</button>
+        </div>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Currency</strong><span>GMD (Gambian Dalasi)</span></div>
+          <button class="btn light" onclick="toast('Currency selector opened in demo.')">Change</button>
+        </div>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Language</strong><span>English</span></div>
+          <button class="btn light" onclick="toast('Language selector opened in demo.')">Change</button>
+        </div>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Working hours</strong><span>07:00 – 20:00 daily</span></div>
+          <button class="btn light" onclick="toast('Hours editor opened in demo.')">Edit</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Integrations</h2>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Teltonika FMC920</strong><span>GPS device connected</span></div>
+          <span class="badge ok">Connected</span>
+        </div>
+        <div class="switch-row">
+          <div class="switch-label"><strong>WhatsApp Business</strong><span>Instant alert notifications</span></div>
+          <span class="badge ok">Active</span>
+        </div>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Africell data SIM</strong><span>Gambia coverage</span></div>
+          <span class="badge ok">Active</span>
+        </div>
+        <div class="switch-row">
+          <div class="switch-label"><strong>Gambia + Senegal SIM</strong><span>Cross-border upgrade</span></div>
+          <span class="badge gold">Available</span>
+        </div>
+        <div class="switch-row">
+          <div class="switch-label"><strong>API access</strong><span>Connect to other systems</span></div>
+          <span class="badge blue">On request</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER (shown on all panels) -->
+  <div class="cta-banner">
+    <div>
+      <h2>Ready to track your vehicles for real?</h2>
+      <p>Installation in one day. D6,000 one-off hardware fee, then from D500/month. We come to you anywhere in The Gambia.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="pinpoint-by-tabax.html#contact" class="cta-primary">📍 Request a Demo</a>
+      <a href="https://wa.me/447568269232" target="_blank" class="cta-ghost">💬 WhatsApp Us</a>
+    </div>
+  </div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── VEHICLE DATA ──
+const vehicles = [
+  {id:'DLH-TR01', name:'Massey Ferguson 590',  driver:'Modou Bittaye',  status:'moving',  speed:18,  pos:[32,58], country:'Gambia',  last:'Now',    battery:'13.9 V'},
+  {id:'GMB-221',  name:'Toyota Hilux',          driver:'Lamin Sanneh',   status:'moving',  speed:62,  pos:[48,43], country:'Gambia',  last:'Now',    battery:'14.1 V'},
+  {id:'KRG-017',  name:'Renault Master',        driver:'Ousman Jallow',  status:'idle',    speed:0,   pos:[58,50], country:'Gambia',  last:'2 min',  battery:'13.6 V'},
+  {id:'GMB-404',  name:'Toyota Corolla',        driver:'Binta Ceesay',   status:'parked',  speed:0,   pos:[18,62], country:'Gambia',  last:'5 min',  battery:'12.7 V'},
+  {id:'DLH-V02',  name:'Mitsubishi Canter',     driver:'Ebrima Colley',  status:'alert',   speed:94,  pos:[42,54], country:'Gambia',  last:'Now',    battery:'13.8 V'},
+  {id:'SN-102',   name:'Peugeot Partner',       driver:'Cheikh Faye',    status:'moving',  speed:55,  pos:[74,32], country:'Senegal', last:'Now',    battery:'14.0 V'},
+  {id:'SN-787',   name:'Toyota Coaster',        driver:'Ibrahima Tall',  status:'parked',  speed:0,   pos:[68,58], country:'Senegal', last:'8 min',  battery:'12.4 V'},
+  {id:'GMB-812',  name:'Nissan Navara',         driver:'Sainey Manga',   status:'idle',    speed:0,   pos:[26,44], country:'Gambia',  last:'3 min',  battery:'13.4 V'},
+  {id:'DLH-TR03', name:'New Holland Tractor',   driver:'Samba Sowe',     status:'offline', speed:0,   pos:[38,32], country:'Gambia',  last:'41 min', battery:'—'},
+  {id:'GMB-099',  name:'Ford Ranger',           driver:'Mariama Darboe', status:'parked',  speed:0,   pos:[54,66], country:'Gambia',  last:'6 min',  battery:'12.6 V'},
+];
+
+const alerts = [
+  {title:'Overspeed — DLH-V02',       text:'94 km/h detected · 13:41 · Brikama road',     cls:'a-danger'},
+  {title:'Geofence exit — GMB-221',   text:'Left Banjul depot boundary · 12:55',           cls:'a-warn'},
+  {title:'Tracker offline — DLH-TR03',text:'No signal for 41 minutes · last seen Kerewan', cls:''},
+  {title:'Service due — DLH-TR01',    text:'Engine oil due in 270 km · scheduled reminder', cls:'a-warn'},
+];
+
+function statusLabel(s) {
+  return {moving:'Moving', idle:'Idling', parked:'Parked', offline:'Offline', alert:'Overspeed'}[s] || s;
+}
+function statusCls(s) {
+  return {moving:'ok', idle:'warn', parked:'blue', offline:'off', alert:'danger'}[s] || '';
+}
+
+// ── MARKERS ──
+function renderMarkers() {
+  const map = document.getElementById('mainMap');
+  map.querySelectorAll('.vmarker').forEach(m => m.remove());
+  vehicles.forEach(v => {
+    const m = document.createElement('div');
+    m.className = 'vmarker ' + v.status;
+    m.style.left = v.pos[0] + '%';
+    m.style.top  = v.pos[1] + '%';
+    m.addEventListener('mouseenter', e => showTooltip(v, e));
+    m.addEventListener('mouseleave', hideTooltip);
+    m.addEventListener('click', () => { switchPage('live'); document.getElementById('liveSelect').value = v.id; renderLiveVehicle(); });
+    map.appendChild(m);
+  });
+}
+
+function showTooltip(v, e) {
+  const tt = document.getElementById('mapTooltip');
+  const map = document.getElementById('mainMap');
+  const r = map.getBoundingClientRect();
+  tt.innerHTML = `<strong>${v.id}</strong> · ${v.name}<br><span style="color:var(--muted)">${v.driver}</span><br><b>${statusLabel(v.status)}</b> · ${v.speed} km/h<br>${v.country} · ${v.last}`;
+  tt.style.display = 'block';
+  tt.style.left = Math.min(r.width - 190, e.clientX - r.left + 14) + 'px';
+  tt.style.top  = Math.max(8, e.clientY - r.top - 50) + 'px';
+}
+function hideTooltip() {
+  document.getElementById('mapTooltip').style.display = 'none';
+}
+
+// ── VEHICLE LIST ──
+function renderVehicleList() {
+  const q = (document.getElementById('vehicleSearch')?.value || '').toLowerCase();
+  const el = document.getElementById('vehicleList');
+  if (!el) return;
+  el.innerHTML = '';
+  vehicles.filter(v => (v.id + v.name + v.driver).toLowerCase().includes(q)).forEach(v => {
+    const d = document.createElement('div');
+    d.className = 'vehicle-item';
+    d.innerHTML = `
+      <div class="v-dot ${v.status}"></div>
+      <div>
+        <div class="v-name">${v.id} · ${v.name}</div>
+        <div class="v-meta">${v.driver} · ${v.speed} km/h · ${v.country}</div>
+      </div>
+      <span class="badge ${statusCls(v.status)}">${statusLabel(v.status)}</span>`;
+    d.onclick = () => { switchPage('live'); document.getElementById('liveSelect').value = v.id; renderLiveVehicle(); };
+    el.appendChild(d);
+  });
+}
+function filterVehicles() { renderVehicleList(); }
+
+// ── ALERTS ──
+function renderAlerts() {
+  const el = document.getElementById('alertList');
+  if (!el) return;
+  el.innerHTML = '';
+  alerts.forEach(a => {
+    const d = document.createElement('div');
+    d.className = 'alert-item ' + (a.cls || '');
+    d.innerHTML = `<strong>${a.title}</strong><span>${a.text}</span>`;
+    el.appendChild(d);
+  });
+  document.getElementById('kpi-alerts').textContent = alerts.length;
+}
+
+function simulateAlert() {
+  const newAlert = {
+    title: 'New alert — DLH-TR01 entered geofence',
+    text: 'Vehicle entered Chamen Farm boundary · just now',
+    cls: 'a-warn'
+  };
+  alerts.unshift(newAlert);
+  renderAlerts();
+  toast('⚡ New alert: DLH-TR01 entered farm boundary. WhatsApp notification sent to manager.');
+}
+
+// ── LIVE VEHICLE ──
+function populateLiveSelect() {
+  const s = document.getElementById('liveSelect');
+  s.innerHTML = vehicles.map(v => `<option value="${v.id}">${v.id} — ${v.name}</option>`).join('');
+  renderLiveVehicle();
+}
+function renderLiveVehicle() {
+  const id = document.getElementById('liveSelect')?.value;
+  const v = vehicles.find(x => x.id === id) || vehicles[0];
+  document.getElementById('liveDetails').innerHTML = `
+    <div class="kpi-row" style="grid-template-columns:1fr 1fr;">
+      <div class="kpi"><div class="label">Driver</div><div class="value" style="font-size:18px">${v.driver}</div></div>
+      <div class="kpi"><div class="label">Status</div><div class="value ${statusCls(v.status)}" style="font-size:18px">${statusLabel(v.status)}</div></div>
+      <div class="kpi"><div class="label">Country</div><div class="value" style="font-size:18px">${v.country}</div></div>
+      <div class="kpi"><div class="label">Last update</div><div class="value" style="font-size:18px">${v.last}</div></div>
+    </div>`;
+  document.getElementById('liveSpeed').textContent = v.speed + ' km/h';
+}
+
+// ── FLEET TABLE ──
+function renderFleet() {
+  const q = (document.getElementById('fleetSearch')?.value || '').toLowerCase();
+  const t = document.getElementById('fleetTable');
+  if (!t) return;
+  const filtered = vehicles.filter(v => (v.id + v.name + v.driver).toLowerCase().includes(q));
+  t.innerHTML = `<thead><tr>
+    <th>Vehicle</th><th>Driver</th><th>Country</th>
+    <th>Status</th><th>Speed</th><th>Last update</th><th>Battery</th>
+  </tr></thead><tbody>` +
+  filtered.map(v => `<tr>
+    <td><strong>${v.id}</strong><br><span style="font-size:11.5px;color:var(--muted)">${v.name}</span></td>
+    <td>${v.driver}</td>
+    <td>${v.country}</td>
+    <td><span class="badge ${statusCls(v.status)}">${statusLabel(v.status)}</span></td>
+    <td>${v.speed} km/h</td>
+    <td>${v.last}</td>
+    <td>${v.battery}</td>
+  </tr>`).join('') + '</tbody>';
+}
+
+// ── TRIP PLAYBACK ──
+const tripPoints = [[16,68],[22,63],[30,58],[38,54],[46,50],[54,46],[62,42],[70,38]];
+let tripInterval = null;
+function playTrip() {
+  const marker = document.getElementById('tripMarker');
+  const progress = document.getElementById('tripProgress');
+  let i = 0;
+  progress.style.width = '0%';
+  clearInterval(tripInterval);
+  marker.style.left = tripPoints[0][0] + '%';
+  marker.style.top  = tripPoints[0][1] + '%';
+  tripInterval = setInterval(() => {
+    if (i >= tripPoints.length) { clearInterval(tripInterval); toast('✅ Trip playback complete.'); return; }
+    marker.style.left = tripPoints[i][0] + '%';
+    marker.style.top  = tripPoints[i][1] + '%';
+    progress.style.width = ((i + 1) / tripPoints.length * 100) + '%';
+    i++;
+  }, 500);
+}
+function resetTrip() {
+  clearInterval(tripInterval);
+  document.getElementById('tripProgress').style.width = '0%';
+  const m = document.getElementById('tripMarker');
+  m.style.left = tripPoints[0][0] + '%';
+  m.style.top  = tripPoints[0][1] + '%';
+}
+
+// ── CSV DOWNLOAD ──
+function downloadCSV() {
+  const rows = [
+    ['Vehicle ID', 'Name', 'Driver', 'Status', 'Speed (km/h)', 'Country', 'Last Update', 'Battery'],
+    ...vehicles.map(v => [v.id, v.name, v.driver, statusLabel(v.status), v.speed, v.country, v.last, v.battery])
+  ];
+  const csv = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+  a.download = 'pinpoint-fleet-report.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('⬇ Fleet report downloaded as CSV.');
+}
+
+// ── SWITCH ──
+function toggleSwitch(el) { el.classList.toggle('on'); }
+
+// ── TOAST ──
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => t.style.display = 'none', 3000);
+}
+
+// ── MAP ZOOM ──
+let mapScale = 1;
+function zoomMap(d) {
+  mapScale = Math.min(1.25, Math.max(0.8, mapScale + d * 0.05));
+  const map = document.getElementById('mainMap');
+  const sz = 36 * mapScale;
+  map.style.backgroundSize = `${sz}px ${sz}px, ${sz}px ${sz}px, 100% 100%`;
+}
+function centerFleet() { toast('Fleet centred on map.'); }
+
+// ── NAV ──
+function switchPage(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === id));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('active', b.dataset.page === id));
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+document.querySelectorAll('.nav button').forEach(b => b.addEventListener('click', () => switchPage(b.dataset.page)));
+
+// ── LIVE ANIMATION ──
+setInterval(() => {
+  vehicles.filter(v => v.status === 'moving' || v.status === 'alert').forEach(v => {
+    v.pos[0] = Math.max(8, Math.min(88, v.pos[0] + (Math.random() - 0.45) * 1.4));
+    v.pos[1] = Math.max(12, Math.min(75, v.pos[1] + (Math.random() - 0.5) * 0.9));
+    if (v.status === 'moving') v.speed = Math.max(10, Math.round(v.speed + (Math.random() - 0.5) * 10));
+    if (v.status === 'alert')  v.speed = Math.max(88, Math.round(v.speed + (Math.random() - 0.3) * 5));
+  });
+  renderMarkers();
+  renderVehicleList();
+  renderFleet();
+  const sel = document.getElementById('liveSelect');
+  if (sel) renderLiveVehicle();
+}, 3500);
+
+// ── INIT ──
+renderMarkers();
+renderVehicleList();
+renderAlerts();
+renderFleet();
+populateLiveSelect();
+</script>
+</body>
+</html>

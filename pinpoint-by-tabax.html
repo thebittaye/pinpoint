@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pinpoint by Tabax — Know Where Your Vehicle Is. Always.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --earth:    #0F1A0F;
+  --forest:   #1A3A1A;
+  --leaf:     #2E7D32;
+  --grass:    #4CAF50;
+  --gold:     #C8971A;
+  --straw:    #F5E6B8;
+  --dust:     #F9F4E8;
+  --chalk:    #FFFFFF;
+  --muted:    #6B7A6B;
+  --line:     rgba(46,125,50,0.15);
+  --radius:   12px;
+  --shadow:   0 4px 24px rgba(15,26,15,0.10);
+  --shadow-lg:0 12px 48px rgba(15,26,15,0.16);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--dust);
+  color: var(--earth);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 32px;
+  background: rgba(15,26,15,0.96);
+  backdrop-filter: blur(12px);
+}
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  color: var(--straw);
+  display: flex; flex-direction: column; align-items: flex-start;
+  letter-spacing: -0.3px;
+}
+.nav-logo-main { font-size: 20px; line-height: 1.1; display: flex; align-items: center; gap: 8px; }
+.nav-logo-sub { font-size: 10px; font-weight: 400; color: rgba(245,230,184,0.4); letter-spacing: 1.5px; text-transform: uppercase; padding-left: 18px; margin-top: 2px; }
+.nav-logo .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--grass);
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { box-shadow: 0 0 0 0 rgba(76,175,80,0.5); }
+  50%      { box-shadow: 0 0 0 8px rgba(76,175,80,0); }
+}
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a {
+  color: rgba(245,230,184,0.75);
+  text-decoration: none; font-size: 14px; font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--straw); }
+.nav-cta {
+  background: var(--gold); color: var(--earth);
+  padding: 9px 20px; border-radius: 8px;
+  font-weight: 600; font-size: 14px;
+  text-decoration: none; transition: all 0.2s;
+}
+.nav-cta:hover { background: var(--straw); transform: translateY(-1px); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: var(--forest);
+  display: flex; align-items: center;
+  position: relative; overflow: hidden;
+  padding: 120px 32px 80px;
+}
+
+/* Animated terrain lines */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 59px,
+      rgba(46,125,50,0.07) 60px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 79px,
+      rgba(46,125,50,0.05) 80px
+    );
+  pointer-events: none;
+}
+
+.hero-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: center; width: 100%;
+  position: relative; z-index: 2;
+}
+
+.hero-eyebrow {
+  font-size: 12px; font-weight: 600; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--grass);
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 800; line-height: 1.05;
+  color: var(--chalk); letter-spacing: -1px;
+  margin-bottom: 22px;
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: var(--gold);
+}
+
+.hero-sub {
+  font-size: 17px; color: rgba(245,230,184,0.75);
+  max-width: 440px; margin-bottom: 36px;
+  line-height: 1.7;
+}
+
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.btn-primary {
+  background: var(--gold); color: var(--earth);
+  padding: 14px 28px; border-radius: 10px;
+  font-weight: 700; font-size: 15px;
+  text-decoration: none; transition: all 0.2s;
+  display: inline-block;
+}
+.btn-primary:hover { background: var(--straw); transform: translateY(-2px); box-shadow: var(--shadow); }
+
+.btn-ghost {
+  border: 1.5px solid rgba(245,230,184,0.3);
+  color: var(--straw);
+  padding: 14px 28px; border-radius: 10px;
+  font-weight: 600; font-size: 15px;
+  text-decoration: none; transition: all 0.2s;
+  display: inline-block;
+}
+.btn-ghost:hover { border-color: var(--straw); background: rgba(245,230,184,0.08); }
+
+/* ── GPS PULSE VISUAL (signature element) ── */
+.hero-visual {
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+
+.gps-scene {
+  width: 340px; height: 340px;
+  position: relative; flex-shrink: 0;
+}
+
+/* Ripple rings */
+.ring {
+  position: absolute; border-radius: 50%;
+  border: 1.5px solid var(--grass);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ring-expand 3s ease-out infinite;
+  opacity: 0;
+}
+.ring:nth-child(1) { animation-delay: 0s; }
+.ring:nth-child(2) { animation-delay: 1s; }
+.ring:nth-child(3) { animation-delay: 2s; }
+
+@keyframes ring-expand {
+  0%   { width: 60px; height: 60px; opacity: 0.8; }
+  100% { width: 320px; height: 320px; opacity: 0; }
+}
+
+/* Map tile background */
+.map-bg {
+  position: absolute; inset: 20px;
+  border-radius: 50%;
+  background:
+    repeating-linear-gradient(0deg, rgba(46,125,50,0.08) 0px, rgba(46,125,50,0.08) 1px, transparent 1px, transparent 32px),
+    repeating-linear-gradient(90deg, rgba(46,125,50,0.08) 0px, rgba(46,125,50,0.08) 1px, transparent 1px, transparent 32px),
+    radial-gradient(ellipse at 40% 60%, rgba(46,125,50,0.18) 0%, transparent 60%),
+    #0D2010;
+  border: 1px solid rgba(46,125,50,0.2);
+  overflow: hidden;
+}
+
+/* Road lines */
+.road {
+  position: absolute; background: rgba(200,151,26,0.25);
+}
+.road-h { height: 3px; left: 0; right: 0; top: 55%; border-radius: 2px; }
+.road-v { width: 3px; top: 0; bottom: 0; left: 38%; border-radius: 2px; }
+.road-d { height: 2px; width: 140%; left: -20%; top: 32%; transform: rotate(25deg); background: rgba(200,151,26,0.15); }
+
+/* Tractor marker */
+.tractor-pin {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -60%);
+  font-size: 40px;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+  animation: tractor-bob 4s ease-in-out infinite;
+  z-index: 10;
+}
+@keyframes tractor-bob {
+  0%,100% { transform: translate(-50%, -60%); }
+  50%      { transform: translate(-50%, -66%); }
+}
+
+/* Pin dot */
+.pin-dot {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, 8px);
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--grass);
+  box-shadow: 0 0 0 4px rgba(76,175,80,0.3);
+  z-index: 9;
+}
+
+/* Speed badge */
+.speed-badge {
+  position: absolute; bottom: 60px; right: 30px;
+  background: var(--earth);
+  border: 1px solid rgba(46,125,50,0.4);
+  border-radius: 10px; padding: 10px 14px;
+  font-size: 12px; color: var(--straw);
+  z-index: 11;
+}
+.speed-badge strong { display: block; font-size: 22px; font-family: 'Syne', sans-serif; color: var(--grass); }
+
+/* Last seen badge */
+.seen-badge {
+  position: absolute; top: 60px; left: 20px;
+  background: var(--earth);
+  border: 1px solid rgba(200,151,26,0.4);
+  border-radius: 10px; padding: 10px 14px;
+  font-size: 11px; color: rgba(245,230,184,0.7);
+  z-index: 11; max-width: 140px;
+}
+.seen-badge strong { display: block; font-size: 13px; color: var(--gold); margin-bottom: 2px; }
+
+/* ── STATS STRIP ── */
+.stats-strip {
+  background: var(--earth);
+  padding: 40px 32px;
+}
+.stats-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+.stat { text-align: center; }
+.stat-number {
+  font-family: 'Syne', sans-serif;
+  font-size: 42px; font-weight: 800;
+  color: var(--gold); line-height: 1;
+  margin-bottom: 6px;
+}
+.stat-label { font-size: 13px; color: rgba(245,230,184,0.6); font-weight: 500; }
+
+/* ── SECTIONS ── */
+section { padding: 96px 32px; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+
+.section-eyebrow {
+  font-size: 12px; font-weight: 600; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--leaf);
+  margin-bottom: 12px;
+}
+.section-heading {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800; line-height: 1.1;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+  color: var(--earth);
+}
+.section-sub {
+  font-size: 16px; color: var(--muted);
+  max-width: 520px; line-height: 1.7;
+  margin-bottom: 52px;
+}
+
+/* ── FEATURES ── */
+.features-bg { background: var(--dust); }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.feature-card {
+  background: var(--chalk);
+  border-radius: 16px;
+  padding: 32px 28px;
+  border: 1px solid var(--line);
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.feature-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--leaf), var(--grass));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s;
+}
+.feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.feature-card:hover::before { transform: scaleX(1); }
+
+.feature-icon {
+  font-size: 36px; margin-bottom: 16px;
+  display: block;
+}
+.feature-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px; font-weight: 700;
+  margin-bottom: 10px; color: var(--forest);
+}
+.feature-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+.feature-card.highlight {
+  background: var(--forest); border-color: transparent;
+}
+.feature-card.highlight .feature-title { color: var(--straw); }
+.feature-card.highlight .feature-desc { color: rgba(245,230,184,0.65); }
+.feature-card.highlight::before { background: linear-gradient(90deg, var(--gold), var(--grass)); }
+
+/* ── HOW IT WORKS ── */
+.how-bg { background: var(--chalk); }
+
+.steps-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0; position: relative;
+}
+.steps-grid::before {
+  content: '';
+  position: absolute; top: 32px; left: 12.5%; right: 12.5%; height: 2px;
+  background: linear-gradient(90deg, var(--leaf), var(--grass), var(--gold));
+}
+.step { text-align: center; padding: 0 16px; }
+.step-num {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--forest);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  font-family: 'Syne', sans-serif;
+  font-size: 22px; font-weight: 800; color: var(--gold);
+  position: relative; z-index: 2;
+  border: 3px solid var(--chalk);
+}
+.step-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px; font-weight: 700;
+  margin-bottom: 8px; color: var(--forest);
+}
+.step-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ── WHO IT'S FOR ── */
+.who-bg { background: var(--forest); }
+.who-bg .section-heading { color: var(--straw); }
+.who-bg .section-sub { color: rgba(245,230,184,0.65); }
+.who-bg .section-eyebrow { color: var(--grass); }
+
+.who-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.who-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(46,125,50,0.25);
+  border-radius: 14px; padding: 28px 24px;
+  transition: all 0.2s;
+}
+.who-card:hover {
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(200,151,26,0.4);
+  transform: translateY(-3px);
+}
+.who-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+.who-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 17px; font-weight: 700;
+  color: var(--straw); margin-bottom: 8px;
+}
+.who-desc { font-size: 13px; color: rgba(245,230,184,0.6); line-height: 1.65; }
+
+/* ── PRICING ── */
+.pricing-bg { background: var(--dust); }
+
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px; align-items: start;
+}
+.price-card {
+  background: var(--chalk);
+  border-radius: 16px; padding: 36px 28px;
+  border: 1.5px solid var(--line);
+  position: relative;
+}
+.price-card.popular {
+  background: var(--forest);
+  border-color: var(--gold);
+  transform: scale(1.03);
+}
+.popular-badge {
+  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  background: var(--gold); color: var(--earth);
+  padding: 5px 16px; border-radius: 20px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.price-tier {
+  font-size: 12px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--leaf);
+  margin-bottom: 12px;
+}
+.price-card.popular .price-tier { color: var(--grass); }
+.price-amount {
+  font-family: 'Syne', sans-serif;
+  font-size: 42px; font-weight: 800; line-height: 1;
+  color: var(--earth); margin-bottom: 4px;
+}
+.price-card.popular .price-amount { color: var(--straw); }
+.price-currency { font-size: 20px; vertical-align: super; }
+.price-period { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+.price-card.popular .price-period { color: rgba(245,230,184,0.6); }
+.price-features { list-style: none; margin-bottom: 32px; }
+.price-features li {
+  font-size: 14px; padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  display: flex; gap: 10px; align-items: flex-start;
+  color: var(--earth);
+}
+.price-card.popular .price-features li { color: rgba(245,230,184,0.85); border-bottom-color: rgba(46,125,50,0.2); }
+.price-features li::before { content: '✓'; color: var(--grass); font-weight: 700; flex-shrink: 0; }
+.price-features li.no::before { content: '–'; color: var(--muted); }
+.price-btn {
+  display: block; text-align: center;
+  padding: 13px; border-radius: 9px;
+  font-weight: 700; font-size: 14px;
+  text-decoration: none; transition: all 0.2s;
+  background: var(--leaf); color: var(--chalk);
+}
+.price-card.popular .price-btn { background: var(--gold); color: var(--earth); }
+.price-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+.pricing-note {
+  text-align: center; margin-top: 32px;
+  font-size: 13px; color: var(--muted);
+}
+
+/* ── TESTIMONIAL ── */
+.testi-bg { background: var(--earth); }
+.testi-bg .section-heading { color: var(--straw); }
+.testi-bg .section-eyebrow { color: var(--grass); }
+
+.testi-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.testi-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 28px 24px;
+}
+.testi-quote {
+  font-size: 14px; color: rgba(245,230,184,0.75);
+  line-height: 1.75; margin-bottom: 20px;
+  font-style: italic;
+}
+.testi-author {
+  font-size: 13px; font-weight: 600; color: var(--straw);
+}
+.testi-role { font-size: 12px; color: var(--muted); }
+
+/* ── CONTACT FORM ── */
+.contact-bg { background: var(--forest); }
+.contact-bg .section-heading { color: var(--straw); }
+.contact-bg .section-sub { color: rgba(245,230,184,0.65); }
+.contact-bg .section-eyebrow { color: var(--grass); }
+
+.contact-layout {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: start;
+}
+
+.contact-info { }
+.contact-point {
+  display: flex; gap: 16px; margin-bottom: 28px; align-items: flex-start;
+}
+.contact-point-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: rgba(76,175,80,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.contact-point-text strong {
+  display: block; font-size: 14px; color: var(--straw); margin-bottom: 3px;
+}
+.contact-point-text span { font-size: 13px; color: rgba(245,230,184,0.6); }
+
+.form-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(46,125,50,0.25);
+  border-radius: 16px; padding: 36px;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.form-group label { font-size: 12px; font-weight: 600; color: rgba(245,230,184,0.7); text-transform: uppercase; letter-spacing: 0.5px; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(46,125,50,0.25);
+  border-radius: 8px; padding: 11px 14px;
+  font-size: 14px; font-family: 'DM Sans', sans-serif;
+  color: var(--straw); width: 100%;
+  transition: border-color 0.2s;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: rgba(245,230,184,0.3); }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none; border-color: var(--grass);
+}
+.form-group select option { background: var(--forest); color: var(--straw); }
+.form-group textarea { resize: vertical; min-height: 90px; }
+.form-submit {
+  width: 100%; background: var(--gold); color: var(--earth);
+  border: none; padding: 14px; border-radius: 9px;
+  font-family: 'Syne', sans-serif;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  transition: all 0.2s;
+}
+.form-submit:hover { background: var(--straw); transform: translateY(-1px); }
+.form-success {
+  display: none; text-align: center; padding: 20px;
+  color: var(--grass); font-weight: 600; font-size: 15px;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--earth); padding: 40px 32px;
+  text-align: center;
+}
+.footer-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px; font-weight: 800;
+  color: var(--straw); margin-bottom: 10px;
+}
+.footer-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+.footer-links { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
+.footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; }
+.footer-links a:hover { color: var(--straw); }
+.footer-copy { margin-top: 24px; font-size: 12px; color: rgba(107,122,107,0.6); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 20px 60px; }
+  .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+  .hero-visual { order: -1; }
+  .gps-scene { width: 260px; height: 260px; }
+  .stats-inner { grid-template-columns: repeat(2,1fr); }
+  section { padding: 64px 20px; }
+  .features-grid,
+  .who-grid,
+  .pricing-grid,
+  .testi-grid { grid-template-columns: 1fr; }
+  .price-card.popular { transform: none; }
+  .steps-grid { grid-template-columns: repeat(2,1fr); gap: 32px; }
+  .steps-grid::before { display: none; }
+  .contact-layout { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-main"><div class="dot"></div>Pinpoint</div>
+    <div class="nav-logo-sub">by Tabax Digital</div>
+  </div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how">How It Works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact">Contact</a>
+    <a href="#contact" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Pinpoint by Tabax · GPS Tracking</div>
+      <h1>Know Where Your<br><em>Vehicle Is.</em><br>Always.</h1>
+      <p class="hero-sub">Real-time GPS tracking built for Gambian businesses. Tractors, taxis, delivery fleets, and company vehicles — monitored live from your phone, anywhere in the world.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Request a Demo</a>
+        <a href="pinpoint-demo.html" class="btn-ghost" style="display:inline-block;margin-top:10px;">🎮 Try the Interactive Demo</a>
+        <a href="#features" class="btn-ghost">See Features</a>
+        <a href="pinpoint-demo.html" style="display:inline-flex;align-items:center;gap:8px;border:1.5px solid rgba(245,230,184,0.3);color:var(--straw);padding:14px 28px;border-radius:10px;font-weight:600;font-size:15px;text-decoration:none;transition:all 0.2s;">🎮 Try Live Demo</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="gps-scene">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="map-bg">
+          <div class="road road-h"></div>
+          <div class="road road-v"></div>
+          <div class="road road-d"></div>
+        </div>
+        <div class="tractor-pin">🚜</div>
+        <div class="pin-dot"></div>
+        <div class="speed-badge">
+          <strong>12 km/h</strong>
+          Moving
+        </div>
+        <div class="seen-badge">
+          <strong>📍 Chamen Village</strong>
+          Updated 30s ago
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-number">30s</div>
+      <div class="stat-label">Location refresh rate</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">24/7</div>
+      <div class="stat-label">Live monitoring</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">GM+SN</div>
+      <div class="stat-label">Gambia &amp; Senegal coverage</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">UK</div>
+      <div class="stat-label">Monitor from anywhere</div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features-bg" id="features">
+  <div class="section-inner">
+    <div class="section-eyebrow">What You Get</div>
+    <h2 class="section-heading">Everything you need.<br>Nothing you don't.</h2>
+    <p class="section-sub">Pinpoint by Tabax gives you the same technology used by large fleet companies — set up locally, supported personally, priced for Gambian businesses.</p>
+
+    <div class="features-grid">
+      <div class="feature-card highlight">
+        <span class="feature-icon">📍</span>
+        <div class="feature-title">Live GPS Location</div>
+        <div class="feature-desc">See exactly where your vehicle is right now. Updates every 30 seconds on a real map — full coverage across all of Gambia.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📱</span>
+        <div class="feature-title">Phone & Web Access</div>
+        <div class="feature-desc">Open your dashboard on any phone, tablet, or computer. No app to install — just a link. Works from the UK, Banjul, or anywhere.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔔</span>
+        <div class="feature-title">Instant Alerts</div>
+        <div class="feature-desc">Get notified if your vehicle moves outside working hours, leaves a set area, or goes above your speed limit. Catches problems before they become losses.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📊</span>
+        <div class="feature-title">Trip History & Reports</div>
+        <div class="feature-desc">See every journey made — start time, route, distance, stops. Verify your driver's day. Export reports for invoicing and record-keeping.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">👥</span>
+        <div class="feature-title">Customer Access Portals</div>
+        <div class="feature-desc">Give your clients their own login to track their vehicle. They see only what's theirs — ideal for hire businesses, logistics, and tour operators.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🌍</span>
+        <div class="feature-title">Gambia + Senegal Coverage</div>
+        <div class="feature-desc">Standard plans cover all of Gambia. For vehicles crossing into Senegal regularly — border trade, transport, logistics — we offer an international SIM upgrade that tracks seamlessly across both countries with no roaming gaps.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🚜</span>
+        <div class="feature-title">Agricultural Tracking</div>
+        <div class="feature-desc">Built-in support for tractor and equipment hire — track acres worked, time on site, and job locations. Purpose-built for Gambian farming operations.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔒</span>
+        <div class="feature-title">Theft Protection</div>
+        <div class="feature-desc">If your vehicle moves without authorisation, you know immediately. Locate it in real time and share the location with police or security.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🛠️</span>
+        <div class="feature-title">Local Installation & Support</div>
+        <div class="feature-desc">Installed by our team in Gambia. When you need help, you speak to someone who knows the country, the roads, and the network.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-bg" id="how">
+  <div class="section-inner">
+    <div class="section-eyebrow">Simple Setup</div>
+    <h2 class="section-heading">Up and running in one day.</h2>
+    <p class="section-sub">No technical knowledge needed. We handle everything — you just watch your vehicles on your phone.</p>
+
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Contact Us</div>
+        <div class="step-desc">Tell us how many vehicles you need to track and what you want to monitor. We'll recommend the right setup.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">We Install</div>
+        <div class="step-desc">Our team fits the GPS device to your vehicle in under an hour. Wired to power, hidden from view, weatherproof.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">You Track</div>
+        <div class="step-desc">We send you a link and your login. Open it on your phone — your vehicle appears on the map within minutes.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-title">We Support</div>
+        <div class="step-desc">Questions? WhatsApp us. We're based in Gambia and respond fast. Monthly check-ins included on all plans.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section class="who-bg">
+  <div class="section-inner">
+    <div class="section-eyebrow">Built For</div>
+    <h2 class="section-heading">Who uses Pinpoint by Tabax?</h2>
+    <p class="section-sub">Any business with vehicles to protect, manage, or account for.</p>
+
+    <div class="who-grid">
+      <div class="who-card">
+        <span class="who-icon">🚜</span>
+        <div class="who-title">Tractor & Equipment Hire</div>
+        <div class="who-desc">Know where your tractor is, who has it, and how long it's been working. Track acres covered per job and bill with confidence.</div>
+      </div>
+      <div class="who-card">
+        <span class="who-icon">🚕</span>
+        <div class="who-title">Taxi & Transport Operators</div>
+        <div class="who-desc">Monitor your drivers, verify routes, and protect your vehicles around the clock. Dispute any false claim with trip data.</div>
+      </div>
+      <div class="who-card">
+        <span class="who-icon">📦</span>
+        <div class="who-title">Delivery & Logistics</div>
+        <div class="who-desc">Tell customers exactly when to expect their delivery. Optimise routes, reduce fuel costs, and prove on-time performance.</div>
+      </div>
+      <div class="who-card">
+        <span class="who-icon">🏗️</span>
+        <div class="who-title">Construction & Plant Hire</div>
+        <div class="who-desc">Track excavators, generators, and heavy equipment across multiple sites. Prevent theft and verify utilisation.</div>
+      </div>
+      <div class="who-card">
+        <span class="who-icon">🏖️</span>
+        <div class="who-title">Tour Operators</div>
+        <div class="who-desc">Share live vehicle locations with tourists and hotels. Guarantee pickups and build the trust that gets you repeat bookings.</div>
+      </div>
+      <div class="who-card">
+        <span class="who-icon">🏢</span>
+        <div class="who-title">Any Business With a Fleet</div>
+        <div class="who-desc">If you have vehicles and people driving them on your behalf, Pinpoint by Tabax gives you visibility and accountability.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-bg" id="pricing">
+  <div class="section-inner">
+    <div class="section-eyebrow">Transparent Pricing</div>
+    <h2 class="section-heading">Simple monthly plans.</h2>
+    <p class="section-sub">One-off hardware cost, then a flat monthly fee. No hidden charges, no long contracts. Cancel any time.</p>
+
+    <!-- Installation fee banner -->
+    <div style="background:var(--forest);border-radius:14px;padding:24px 32px;margin-bottom:36px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <div>
+        <div style="font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--grass);margin-bottom:6px;">One-Off Installation Fee</div>
+        <div style="font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--straw);line-height:1;">D6,000 <span style="font-size:16px;font-weight:400;color:rgba(245,230,184,0.6)">per vehicle</span></div>
+        <div style="font-size:13px;color:rgba(245,230,184,0.55);margin-top:4px;">Includes GPS device, SIM setup, full wiring installation & onboarding</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:13px;color:rgba(245,230,184,0.6);margin-bottom:4px;">Then choose your monthly plan below</div>
+        <div style="font-size:12px;color:rgba(245,230,184,0.4);">No hidden fees. Cancel any time.</div>
+      </div>
+    </div>
+
+    <div class="pricing-grid">
+      <!-- BASIC -->
+      <div class="price-card">
+        <div class="price-tier">Basic · 1 Vehicle</div>
+        <div class="price-amount"><span class="price-currency">D</span>500</div>
+        <div class="price-period">per month</div>
+        <ul class="price-features">
+          <li>Live GPS location</li>
+          <li>30-second updates</li>
+          <li>7-day trip history</li>
+          <li>Phone &amp; web access</li>
+          <li>WhatsApp support</li>
+          <li class="no">Custom alerts &amp; geofencing</li>
+          <li class="no">Customer portal access</li>
+          <li class="no">Monthly PDF reports</li>
+        </ul>
+        <a href="#contact" class="price-btn">Get Started</a>
+      </div>
+
+      <!-- BUSINESS -->
+      <div class="price-card popular">
+        <div class="popular-badge">Most Popular</div>
+        <div class="price-tier">Business</div>
+        <div style="margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(46,125,50,0.2);font-size:13px;color:rgba(245,230,184,0.7);">
+            <span>2–5 vehicles</span>
+            <span style="font-family:'Syne',sans-serif;font-weight:700;color:var(--straw);">D800 <span style="font-size:11px;font-weight:400;">/vehicle/mo</span></span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(46,125,50,0.2);font-size:13px;color:rgba(245,230,184,0.7);">
+            <span>6–10 vehicles</span>
+            <span style="font-family:'Syne',sans-serif;font-weight:700;color:var(--gold);">D700 <span style="font-size:11px;font-weight:400;">/vehicle/mo</span></span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:13px;color:rgba(245,230,184,0.7);">
+            <span>11–20 vehicles</span>
+            <span style="font-family:'Syne',sans-serif;font-weight:700;color:var(--grass);">D600 <span style="font-size:11px;font-weight:400;">/vehicle/mo</span></span>
+          </div>
+        </div>
+        <ul class="price-features">
+          <li>Live GPS location</li>
+          <li>30-second updates</li>
+          <li>90-day trip history</li>
+          <li>Phone &amp; web access</li>
+          <li>Priority WhatsApp support</li>
+          <li>Custom alerts &amp; geofencing</li>
+          <li>Customer portal access</li>
+          <li>Monthly PDF reports</li>
+        </ul>
+        <a href="#contact" class="price-btn">Get Started</a>
+      </div>
+
+      <!-- FLEET -->
+      <div class="price-card">
+        <div class="price-tier">Fleet · 20+ Vehicles</div>
+        <div class="price-amount" style="font-size:28px;padding-top:8px;">Custom</div>
+        <div class="price-period">negotiated per fleet</div>
+        <ul class="price-features">
+          <li>Everything in Business</li>
+          <li>Best per-vehicle rate</li>
+          <li>Dedicated account manager</li>
+          <li>Custom dashboard branding</li>
+          <li>On-site training session</li>
+          <li>SLA response guarantee</li>
+          <li>Quarterly review meetings</li>
+          <li>Gambia + Senegal SIM included</li>
+        </ul>
+        <a href="#contact" class="price-btn">Talk to Us</a>
+      </div>
+    </div>
+
+    <p class="pricing-note">Installation fee of D6,000 applies per vehicle regardless of plan. Monthly fee covers platform access, Gambia data SIM, and support. Gambia + Senegal cross-border SIM available as an add-on — ask us for details. No contracts — cancel any time.</p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS placeholder - ready for real customers -->
+<section class="testi-bg">
+  <div class="section-inner">
+    <div class="section-eyebrow">Early Customers</div>
+    <h2 class="section-heading" style="color:var(--straw)">What our customers say.</h2>
+
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-quote">"Since installing Pinpoint by Tabax on our tractor, I can see from the UK exactly where it is and how long it worked each day. It has changed how we run the business completely."</div>
+        <div class="testi-author">Baboucarr Bittaye</div>
+        <div class="testi-role">Dolleh Agricultural Services, Chamen Village</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-quote">"We track our delivery vehicle in real time and tell customers exactly when to expect us. It makes us look professional and saves us so many phone calls."</div>
+        <div class="testi-author">Your next customer</div>
+        <div class="testi-role">Could this be your business?</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-quote">"Knowing my taxi is protected even when I'm not in it gives me real peace of mind. If it moves at night I get an alert straight to my phone."</div>
+        <div class="testi-author">Your next customer</div>
+        <div class="testi-role">Could this be your business?</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-bg" id="contact">
+  <div class="section-inner">
+    <div class="contact-layout">
+      <div class="contact-info">
+        <div class="section-eyebrow">Get In Touch</div>
+        <h2 class="section-heading">Ready to track<br>your vehicles?</h2>
+        <p class="section-sub">Fill in the form and we'll get back to you within 24 hours to discuss your needs and arrange a free demonstration.</p>
+
+        <div class="contact-point">
+          <div class="contact-point-icon">💬</div>
+          <div class="contact-point-text">
+            <strong>WhatsApp</strong>
+            <span>The fastest way to reach us — we respond same day</span>
+          </div>
+        </div>
+        <div class="contact-point">
+          <div class="contact-point-icon">📍</div>
+          <div class="contact-point-text">
+            <strong>Based in The Gambia</strong>
+            <span>Local installation and support across Greater Banjul and North Bank Region</span>
+          </div>
+        </div>
+        <div class="contact-point">
+          <div class="contact-point-icon">🇬🇧</div>
+          <div class="contact-point-text">
+            <strong>UK Management</strong>
+            <span>Tabax Digital — Brighton, United Kingdom</span>
+          </div>
+        </div>
+        <div class="contact-point">
+          <div class="contact-point-icon">🆓</div>
+          <div class="contact-point-text">
+            <strong>Free Demo</strong>
+            <span>We'll show you exactly how it works on your own vehicle before you commit to anything</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Your Name *</label>
+            <input type="text" id="f-name" placeholder="e.g. Ousman Jallow">
+          </div>
+          <div class="form-group">
+            <label>WhatsApp / Phone *</label>
+            <input type="tel" id="f-phone" placeholder="e.g. 7701234">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Business Name</label>
+          <input type="text" id="f-business" placeholder="e.g. Jallow Transport">
+        </div>
+        <div class="form-group">
+          <label>Type of Business *</label>
+          <select id="f-type">
+            <option value="">Select your business type...</option>
+            <option>Tractor / Equipment Hire</option>
+            <option>Taxi / Transport</option>
+            <option>Delivery / Logistics</option>
+            <option>Tour Operator</option>
+            <option>Construction / Plant Hire</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>How many vehicles?</label>
+          <select id="f-vehicles">
+            <option value="">Select...</option>
+            <option>1 vehicle</option>
+            <option>2–4 vehicles</option>
+            <option>5–10 vehicles</option>
+            <option>10+ vehicles</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tell us more (optional)</label>
+          <textarea id="f-message" placeholder="What do you most want to monitor? Any specific concerns?"></textarea>
+        </div>
+        <button class="form-submit" onclick="submitForm()">📍 Request My Free Demo</button>
+        <div class="form-success" id="form-success">
+          ✓ Thank you! We'll WhatsApp you within 24 hours to arrange your free demo.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Pinpoint by Tabax</div>
+  <div class="footer-sub">A Tabax Digital product · Precise GPS Tracking for UK & Gambia</div>
+  <div class="footer-links">
+    <a href="#features">Features</a>
+    <a href="#how">How It Works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Tabax Digital. Pinpoint is a Tabax Digital product. Brighton, UK & Banjul, The Gambia.</div>
+</footer>
+
+<script>
+// Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// Form submission
+function submitForm() {
+  const name = document.getElementById('f-name').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const type = document.getElementById('f-type').value;
+
+  if (!name || !phone || !type) {
+    alert('Please fill in your name, phone number, and business type.');
+    return;
+  }
+
+  // Build WhatsApp message
+  const business = document.getElementById('f-business').value.trim();
+  const vehicles = document.getElementById('f-vehicles').value;
+  const message = document.getElementById('f-message').value.trim();
+
+  const wa = `Hello Pinpoint by Tabax! I'd like a free demo.\n\nName: ${name}\nPhone: ${phone}\nBusiness: ${business || 'Not provided'}\nType: ${type}\nVehicles: ${vehicles || 'Not specified'}\nMessage: ${message || 'None'}`;
+
+  // Show success message
+  document.getElementById('form-success').style.display = 'block';
+  document.querySelector('.form-submit').style.display = 'none';
+
+  // Open WhatsApp after short delay
+  setTimeout(() => {
+    window.open('https://wa.me/447568269232?text=' + encodeURIComponent(wa), '_blank');
+  }, 800);
+}
+
+// Animate stats on scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feature-card, .who-card, .step, .testi-card, .price-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
